@@ -38,7 +38,7 @@ class AppTroveExpoSdkModule(reactContext: ReactApplicationContext) :
                     initializeMap.getString("environment") ?: ""
             )
     sdkConfig.setSDKType("react_native_sdk")
-    sdkConfig.setSDKVersion("2.0.3")
+    sdkConfig.setSDKVersion("2.0.8")
     sdkConfig.setAppSecret(
             initializeMap.getString("secretId") ?: "",
             initializeMap.getString("secretKey") ?: ""
@@ -209,6 +209,26 @@ class AppTroveExpoSdkModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun setDOB(dob: String) {
+    com.apptrove.sdk.AppTroveSDK.setDOB(dob)
+  }
+
+  @ReactMethod
+  fun setGender(gender: String) {
+    val nativeGender = when (gender.lowercase()) {
+      "male" -> com.apptrove.sdk.AppTroveSDK.Gender.Male
+      "female" -> com.apptrove.sdk.AppTroveSDK.Gender.Female
+      else -> com.apptrove.sdk.AppTroveSDK.Gender.Others
+    }
+    com.apptrove.sdk.AppTroveSDK.setGender(nativeGender)
+  }
+
+  @ReactMethod
+  fun storeRetargetting(url: String) {
+    com.apptrove.sdk.AppTroveSDK.storeRetargetting(reactApplicationContext, url)
+  }
+
+  @ReactMethod
   fun parseDeepLink(uri: String) {
     val data = Uri.parse(uri)
     com.apptrove.sdk.AppTroveSDK.parseDeepLink(data)
@@ -232,6 +252,16 @@ class AppTroveExpoSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getAdSet(promise: Promise) {
     promise.resolve(com.apptrove.sdk.AppTroveSDK.getAdSet())
+  }
+
+  @ReactMethod
+  fun getAdSetID(promise: Promise) {
+    promise.resolve(com.apptrove.sdk.AppTroveSDK.getAdSetID())
+  }
+
+  @ReactMethod
+  fun getPartner(promise: Promise) {
+    promise.resolve(com.apptrove.sdk.AppTroveSDK.getPartner())
   }
 
   @ReactMethod
