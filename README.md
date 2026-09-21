@@ -19,6 +19,7 @@ this is apptrove expo and react-native package
     * [Track Uninstall for Android](#qs-track-uninstall-android)
 * [Deep linking](#qs-deeplink)
 * [Getting Campaign Data](#qs-campaign-data)
+* [SKAdNetwork (iOS)](#qs-skadnetwork)
 * [Proguard Settings](#qs-progaurd-settings)
 
 
@@ -698,6 +699,13 @@ function _onPress_trackSimpleEvent(){
   }
 
 ```
+
+## <a id="qs-skadnetwork"></a>SKAdNetwork (iOS)
+
+SKAdNetwork attribution is handled automatically on iOS — no setup or SDK calls required:
+
+- The SDK registers with SKAdNetwork once on `initialize` (conversion value `0`, persisted locally so it only happens once).
+- After every successful session or `trackEvent`, the SDK calls the AppTrove SKAN compute API and automatically updates Apple with the fine conversion value, coarse conversion value, and lock window whenever the response indicates the postback is active.
 
 ## <a id="qs-progaurd-settings"></a>Proguard Settings 
 

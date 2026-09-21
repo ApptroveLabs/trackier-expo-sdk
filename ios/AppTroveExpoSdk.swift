@@ -92,7 +92,7 @@ class AppTroveExpoSdk: RCTEventEmitter, DeepLinkListener {
 		let config = AppTroveSDKConfig(appToken: appToken , env: environment)
 		config.setSDKType(sdkType: "react_native_sdk")
 		config.setAppSecret(secretId: dict["secretId"] as! String, secretKey: dict["secretKey"] as! String)
-		config.setSDKVersion(sdkVersion: "2.0.3")
+		config.setSDKVersion(sdkVersion: "2.0.8")
 		if (deeplinking != nil) {
 			config.setDeeplinkListerner(listener: self)
 		}
@@ -175,17 +175,28 @@ class AppTroveExpoSdk: RCTEventEmitter, DeepLinkListener {
 	@objc func setUserPhone(_ userPhone: String) {
 		AppTroveSDK.setUserPhone(userPhone: userPhone)
 	}
-	
+
+	@objc func setDOB(_ dob: String) {
+		AppTroveSDK.setDOB(dob: dob)
+	}
+
+	@objc func setGender(_ gender: String) {
+		switch gender.lowercased() {
+		case "male":
+			AppTroveSDK.setGender(gender: .MALE)
+		case "female":
+			AppTroveSDK.setGender(gender: .FEMALE)
+		default:
+			AppTroveSDK.setGender(gender: .OTHERS)
+		}
+	}
+
 	@objc func waitForATTUserAuthorization(_ timeoutInterval: Int) {
 		AppTroveSDK.waitForATTUserAuthorization(timeoutInterval: timeoutInterval)
 	}
 
 	@objc func updateAppleAdsToken(_ token: String) {
 		AppTroveSDK.updateAppleAdsToken(token: token)
-	}
-
-	@objc func updatePostbackConversion(_ conversionValue: Int) {
-		AppTroveSDK.updatePostbackConversion(conversionValue)
 	}
 
 	@objc func subscribeDeeplink() {
@@ -213,7 +224,11 @@ class AppTroveExpoSdk: RCTEventEmitter, DeepLinkListener {
 	@objc func getAdSet(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
 		resolve(AppTroveSDK.getAdSet())
 	}
-	
+
+	@objc func getAdSetID(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+		resolve(AppTroveSDK.getAdSetID())
+	}
+
 	@objc func getChannel(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
 		resolve(AppTroveSDK.getChannel())
 	}

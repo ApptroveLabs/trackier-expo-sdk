@@ -18,6 +18,10 @@ RCT_EXTERN_METHOD(setUserName:(NSString *)userName)
 
 RCT_EXTERN_METHOD(setUserPhone:(NSString *)userPhone)
 
+RCT_EXTERN_METHOD(setDOB:(NSString *)dob)
+
+RCT_EXTERN_METHOD(setGender:(NSString *)gender)
+
 RCT_EXTERN_METHOD(trackAsOrganic:(BOOL *)value)
 
 RCT_EXTERN_METHOD(fireInstall)
@@ -34,8 +38,6 @@ RCT_EXTERN_METHOD(waitForATTUserAuthorization:(NSInteger *)timeoutInterval)
 
 RCT_EXTERN_METHOD(updateAppleAdsToken:(NSString *)token)
 
-RCT_EXTERN_METHOD(updatePostbackConversion:(NSInteger *)conversionValue)
-
 RCT_EXTERN_METHOD(subscribeDeeplink)
 
 RCT_EXTERN_METHOD(getAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -47,6 +49,8 @@ RCT_EXTERN_METHOD(getCampaign:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 RCT_EXTERN_METHOD(getCampaignID:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getAdSet:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(getAdSetID:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getChannel:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 

@@ -88,6 +88,12 @@ class AppTroveDeepLink {
   }
 }
 
+const AppTroveGender = {
+  MALE: "male",
+  FEMALE: "female",
+  OTHERS: "others"
+};
+
 class AppTroveConfig {
   appToken: string;
   environment: string;
@@ -186,20 +192,25 @@ interface AppTroveSDKProps {
   setUserEmail(userEmail: string): void;
   setUserName(userName: string): void;
   setUserPhone(userPhone: string): void;
+  setDOB(dob: string): void;
+  setGender(gender: string): void;
   trackAsOrganic(value: boolean): void;
   setLocalRefTrack(value: string, delimiter: string): void;
   setUserAdditionalDetails(userAdditionalMap: Record<string, any>): void;
   waitForATTUserAuthorization(timeoutInterval: number): void;
   updateAppleAdsToken(token: string): void;
-  updatePostbackConversion(conversionValue: number): void;
   subscribeDeeplink(): void;
   fireInstall(): void;
   parseDeepLink(value: string): void;
   setIMEI(imei1: string, imei2: string): void;
   setMacAddress(value: string): void;
+  setPreinstallAttribution(pid: string, campaign: string, campaignId: string): void;
+  storeRetargetting(url: string): void;
   getAd(): Promise<string>;
   getAdID(): Promise<string>;
   getAdSet(): Promise<string>;
+  getAdSetID(): Promise<string>;
+  getPartner(): Promise<string>;
   getCampaign(): Promise<string>;
   getCampaignID(): Promise<string>;
   getChannel(): Promise<string>;
@@ -249,6 +260,14 @@ let AppTroveSDK: AppTroveSDKProps = {
     module_apptrove.setUserPhone(userPhone);
   },
 
+  setDOB: function (dob: string) {
+    module_apptrove.setDOB(dob);
+  },
+
+  setGender: function (gender: string) {
+    module_apptrove.setGender(gender);
+  },
+
   trackAsOrganic: function (value: boolean) {
     module_apptrove.trackAsOrganic(value);
   },
@@ -263,19 +282,21 @@ let AppTroveSDK: AppTroveSDKProps = {
   },
 
   waitForATTUserAuthorization: function (timeoutInterval: number) {
-    module_apptrove.waitForATTUserAuthorization(timeoutInterval);
+    if (Platform.OS === 'ios') {
+      module_apptrove.waitForATTUserAuthorization(timeoutInterval);
+    }
   },
 
   updateAppleAdsToken: function (token: string) {
-    module_apptrove.updateAppleAdsToken(token);
-  },
-
-  updatePostbackConversion: function (conversionValue: number) {
-    module_apptrove.updatePostbackConversion(conversionValue);
+    if (Platform.OS === 'ios') {
+      module_apptrove.updateAppleAdsToken(token);
+    }
   },
 
   subscribeDeeplink: function () {
-    module_apptrove.subscribeDeeplink();
+    if (Platform.OS === 'ios') {
+      module_apptrove.subscribeDeeplink();
+    }
   },
 
   fireInstall: function () {
@@ -294,6 +315,18 @@ let AppTroveSDK: AppTroveSDKProps = {
     module_apptrove.setMacAddress(value);
   },
 
+  setPreinstallAttribution: function (pid: string, campaign: string, campaignId: string) {
+    if (Platform.OS === 'android') {
+      module_apptrove.setPreinstallAttribution(pid, campaign, campaignId);
+    }
+  },
+
+  storeRetargetting: function (url: string) {
+    if (Platform.OS === 'android') {
+      module_apptrove.storeRetargetting(url);
+    }
+  },
+
   getAd: async function () {
     return await module_apptrove.getAd();
   },
@@ -304,6 +337,17 @@ let AppTroveSDK: AppTroveSDKProps = {
 
   getAdSet: async function () {
     return await module_apptrove.getAdSet();
+  },
+
+  getAdSetID: async function () {
+    return await module_apptrove.getAdSetID();
+  },
+
+  getPartner: async function () {
+    if (Platform.OS === 'android') {
+      return await module_apptrove.getPartner();
+    }
+    return '';
   },
 
   getCampaign: async function () {
@@ -356,7 +400,7 @@ let AppTroveSDK: AppTroveSDKProps = {
 
   trackEvent: function (apptroveEvent: AppTroveEvent) {
     let isValidArgs = true;
-    const props = ['eventId', 'orderId', 'currency', 'couponCode', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10'];
+    const props = ['eventId', 'orderId', 'currency', 'couponCode', 'productId', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10'];
 
     props.forEach((v) => {
       const value = (apptroveEvent as any)[v];
@@ -385,11 +429,15 @@ let AppTroveSDK: AppTroveSDKProps = {
   },
 
   sendFcmToken: function (token: string) {
-    module_apptrove.sendFcmToken(token);
+    if (Platform.OS === 'android') {
+      module_apptrove.sendFcmToken(token);
+    }
   },
 
   sendAPNToken: function (token: string) {
-    module_apptrove.sendAPNToken(token);
+    if (Platform.OS === 'ios') {
+      module_apptrove.sendAPNToken(token);
+    }
   }
 };
 
@@ -399,6 +447,7 @@ class AppTroveEvent {
   currency: string | null = null;
   discount: number = 0;
   couponCode: string | null = null;
+  productId: string | null = null;
   param1: string | null = null;
   param2: string | null = null;
   param3: string | null = null;
@@ -442,12 +491,13 @@ class AppTroveEvent {
 
 }
 
-export { AppTroveConfig, AppTroveSDK, AppTroveEvent, AppTroveDeepLink };
+export { AppTroveConfig, AppTroveSDK, AppTroveEvent, AppTroveDeepLink, AppTroveGender };
 
 // Also export for CommonJS compatibility
 module.exports = {
   AppTroveConfig,
   AppTroveSDK,
   AppTroveEvent,
-  AppTroveDeepLink
+  AppTroveDeepLink,
+  AppTroveGender
 }
